@@ -76,10 +76,10 @@ tmphtml=$tmp/tmphtml
 rm $tmphtml >/dev/null 2>&1
 wget -O $tmphtml 'http://releases.ubuntu.com/' >/dev/null 2>&1
 
-prec=$(fgrep Precise $tmphtml | head -1 | awk '{print $3}')
-trus=$(fgrep Trusty $tmphtml | head -1 | awk '{print $3}')
-xenn=$(fgrep Xenial $tmphtml | head -1 | awk '{print $3}')
-zest=$(fgrep Zesty $tmphtml | head -1 | awk '{print $3}')
+prec=$(fgrep Precise $tmphtml | head -1 | awk '{print $3 $1}')
+trus=$(fgrep Trusty $tmphtml | head -1 | awk '{print $3 $1}')
+xenn=$(fgrep Xenial $tmphtml | head -1 | awk '{print $3 $1}')
+zest=$(fgrep Zesty $tmphtml | head -1 | awk '{print $3 $1}')
 
 
 # ask whether to include vmware tools or not
