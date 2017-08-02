@@ -91,7 +91,7 @@ while true; do
     echo "  [3] Ubuntu $xenn LTS Server amd64 - 16.04 Xenial Xerus"
     echo "  [4] Ubuntu $zest LTS Server amd64 - 17.04 Zesty Zapus"
     echo
-    read -p " please enter your preference: [1|2|3]: " ubver
+    read -p " please enter your preference: [1|2|3|4]: " ubver
     case $ubver in
         [1]* )  download_file="ubuntu-$prec-server-amd64.iso"           # filename of the iso to be downloaded
                 download_location="http://releases.ubuntu.com/$prec/"     # location of the file to be downloaded
