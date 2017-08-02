@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# vars - Chris Diehl
+git_repo_url="https://raw.githubusercontent.com/CultClassik/ubuntu-unattended/master/"
+seed_file="auto_ubuntu.seed"
+
 # file names & paths
 tmp="/home/$USER"  # destination folder to store the final iso file
 hostname="ubuntu"
@@ -75,7 +79,7 @@ wget -O $tmphtml 'http://releases.ubuntu.com/' >/dev/null 2>&1
 prec=$(fgrep Precise $tmphtml | head -1 | awk '{print $3}')
 trus=$(fgrep Trusty $tmphtml | head -1 | awk '{print $3}')
 xenn=$(fgrep Xenial $tmphtml | head -1 | awk '{print $3}')
-
+zest=$(fgrep Zesty $tmphtml | head -1 | awk '{print $3}')
 
 
 # ask whether to include vmware tools or not
@@ -100,7 +104,11 @@ while true; do
                 download_location="http://releases.ubuntu.com/$xenn/"
                 new_iso_name="ubuntu-$xenn-server-amd64-unattended.iso"
                 break;;
-        * ) echo " please answer [1], [2] or [3]";;
+        [4]* )  download_file="ubuntu-$zest-server-amd64.iso"
+                download_location="http://releases.ubuntu.com/$zest/"
+                new_iso_name="ubuntu-$zest-server-amd64-unattended.iso"
+                break;;
+        * ) echo " please answer [1], [2], [3] or [4]";;
     esac
 done
 
@@ -115,7 +123,7 @@ fi
 
 # ask the user questions about his/her preferences
 read -ep " please enter your preferred timezone: " -i "${timezone}" timezone
-read -ep " please enter your preferred username: " -i "netson" username
+read -ep " please enter your preferred username: " -i $currentuser username
 read -sp " please enter your preferred password: " password
 printf "\n"
 read -sp " confirm your preferred password: " password2
@@ -129,12 +137,19 @@ if [[ "$password" != "$password2" ]]; then
     exit
 fi
 
+# Chris Diehl
+# ask for the path if the iso already exists
+read -ep " enter path and file name to an existing Ubuntu ISO or hit enter to download it : " -i $tmp/$download_file ubuntu_iso
+tmp=$(dirname $ubuntu_iso)
+download_file=$(basename $ubuntu_iso)
+
 # download the ubunto iso. If it already exists, do not delete in the end.
 cd $tmp
 if [[ ! -f $tmp/$download_file ]]; then
     echo -n " downloading $download_file: "
     download "$download_location$download_file"
 fi
+
 if [[ ! -f $tmp/$download_file ]]; then
 	echo "Error: Failed to download ISO: $download_location$download_file"
 	echo "This file may have moved or may no longer exist."
@@ -145,10 +160,9 @@ if [[ ! -f $tmp/$download_file ]]; then
 fi
 
 # download netson seed file
-seed_file="netson.seed"
 if [[ ! -f $tmp/$seed_file ]]; then
     echo -n " downloading $seed_file: "
-    download "https://raw.githubusercontent.com/netson/ubuntu-unattended/master/$seed_file"
+    download "$git_repo_url$seed_file"
 fi
 
 # install required packages
@@ -203,10 +217,10 @@ sed -i -r 's/timeout\s+[0-9]+/timeout 1/g' $tmp/iso_new/isolinux/isolinux.cfg
 # set late command
 
 if [ $ub1604 == "yes" ]; then
-   late_command="apt-install wget; in-target wget --no-check-certificate -O /home/$username/start.sh https://github.com/netson/ubuntu-unattended/raw/master/start.sh ;\
+   late_command="apt-install wget; in-target wget --no-check-certificate -O /home/$username/start.sh ${github_repo_url}start.sh ;\
      in-target chmod +x /home/$username/start.sh ;"
-else 
-   late_command="chroot /target wget -O /home/$username/start.sh https://github.com/netson/ubuntu-unattended/raw/master/start.sh ;\
+else
+   late_command="chroot /target wget -O /home/$username/start.sh ${github_repo_url}start.sh ;\
      chroot /target chmod +x /home/$username/start.sh ;"
 fi
 
@@ -236,13 +250,13 @@ seed_checksum=$(md5sum $tmp/iso_new/preseed/$seed_file)
 
 # add the autoinstall option to the menu
 sed -i "/label install/ilabel autoinstall\n\
-  menu label ^Autoinstall NETSON Ubuntu Server\n\
+  menu label ^Autoinstall Ubuntu Server\n\
   kernel /install/vmlinuz\n\
-  append file=/cdrom/preseed/ubuntu-server.seed initrd=/install/initrd.gz auto=true priority=high preseed/file=/cdrom/preseed/netson.seed preseed/file/checksum=$seed_checksum --" $tmp/iso_new/isolinux/txt.cfg
+  append file=/cdrom/preseed/ubuntu-server.seed initrd=/install/initrd.gz auto=true priority=high preseed/file=/cdrom/preseed/$seed_file preseed/file/checksum=$seed_checksum --" $tmp/iso_new/isolinux/txt.cfg
 
 echo " creating the remastered iso"
 cd $tmp/iso_new
-(mkisofs -D -r -V "NETSON_UBUNTU" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o $tmp/$new_iso_name . > /dev/null 2>&1) &
+(mkisofs -D -r -V "AUTO_UBUNTU" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o $tmp/$new_iso_name . > /dev/null 2>&1) &
 spinner $!
 
 # make iso bootable (for dd'ing to  USB stick)
