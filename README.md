@@ -3,7 +3,9 @@
 NOTE!!
 More than likely you will boot to a black screen after installing with the ISO produced by these scripts.
 To fix this, use alt+f2 to get another tty.  Log in and edit /etc/default/grub to remove the values from these two settings like so:
+
 GRUB_CMDLINE_LINUX_DEFAULT=""
+
 GRUB_CMDLINE_LINUX=""
 
 Run `update-grub` and reboot, then you should have your display.
