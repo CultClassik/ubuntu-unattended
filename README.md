@@ -1,10 +1,20 @@
 # Unattended Ubuntu ISO Maker
 
+NOTE!!
+More than likely you will boot to a black screen after installing with the ISO produced by these scripts.
+To fix this, use alt+f2 to get another tty.  Log in and edit /etc/default/grub to remove the values from these two settings like so:
+GRUB_CMDLINE_LINUX_DEFAULT=""
+GRUB_CMDLINE_LINUX=""
+
+Run `update-grub` and reboot, then you should have your display.
+
+---
+
 This simple script will create an unattended Ubuntu ISO from start to finish. It will ask you a few questions once, and embed your answers into a remastered ISO file for you to use over and over again.
 
 This script creates a 100% original Ubuntu installation; no additional software is added (aside from the VMWare OSP Tools, which are optional), not even an ```apt-get update``` is performed. You have all the freedom in the world to customize your Ubuntu installation whichever way you see fit. This script just takes the pain out of re-installing Ubuntu over and over again.
 
-Consider using tools like chef or puppet to perform any additional software installations/configurations. 
+Consider using tools like chef or puppet to perform any additional software installations/configurations.
 
 Created by: **Rinck Sonnenberg (Netson)**
 
@@ -102,7 +112,7 @@ This script does a bunch of stuff, here's the quick walk-through:
  finished remastering your ubuntu iso file
  the new file is located at: /tmp/ubuntu-14.04.2-server-amd64-unattended.iso
  your username is: netson
- your password is: 
+ your password is:
  your hostname is: ubuntu
  your timezone is: Europe/Amsterdam
 ```
@@ -111,7 +121,7 @@ This script does a bunch of stuff, here's the quick walk-through:
 
 Just fire off the start.sh script in your users' home directory to complete the installation. This will ask you if you would like to add the puppetlabs repositories for puppet and its dependencies and if you would also like to setup the puppet agent
 
-```$ sudo ~/start.sh``` 
+```$ sudo ~/start.sh```
 
 ### That's it, enjoy! :)
 

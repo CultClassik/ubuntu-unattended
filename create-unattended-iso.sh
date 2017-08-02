@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+###
 # vars - Chris Diehl
 git_repo_url="https://raw.githubusercontent.com/CultClassik/ubuntu-unattended/master/"
 seed_file="auto_ubuntu.seed"
+###
 
 # file names & paths
 tmp="/home/$USER"  # destination folder to store the final iso file

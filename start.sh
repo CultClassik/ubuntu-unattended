@@ -1,4 +1,10 @@
 #!/bin/bash
+
+###
+# vars - Chris Diehl
+git_repo_url="https://raw.githubusercontent.com/CultClassik/ubuntu-unattended/master/"
+###
+
 set -e
 
 # set defaults
@@ -98,7 +104,7 @@ if [[ include_puppet_repo -eq 1 ]]; then
     dpkg -i $tmp/$puppet_deb
     apt-get -y update
     rm $tmp/$puppet_deb
-    
+
     # check to install puppet agent
     if [[ setup_agent -eq 1 ]] ; then
         # install puppet
@@ -120,7 +126,7 @@ pluginsync=true\n\
         if [[ ! -f $tmp/finish.sh ]]; then
             echo -n " downloading finish.sh: "
             cd $tmp
-            download "https://raw.githubusercontent.com/netson/ubuntu-unattended/master/finish.sh"
+            download "${github_repo_url}finish.sh"
         fi
 
         # set proper permissions on finish script
