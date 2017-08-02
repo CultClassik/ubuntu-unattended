@@ -1,3 +1,6 @@
+#   Reference:
+#   https://help.ubuntu.com/lts/installation-guide/example-preseed.txt
+
 # regional setting
 d-i debian-installer/language                               string      en_US:en
 d-i debian-installer/country                                string      US
