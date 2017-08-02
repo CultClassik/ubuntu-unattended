@@ -72,7 +72,7 @@ fi
 
 #get the latest versions of Ubuntu LTS
 
-tmphtml=$tmp/tmphtml
+tmphtml="/root/tmphtml"
 rm $tmphtml >/dev/null 2>&1
 wget -O $tmphtml 'http://releases.ubuntu.com/' >/dev/null 2>&1
 
