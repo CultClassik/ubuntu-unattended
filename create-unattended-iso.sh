@@ -76,19 +76,20 @@ tmphtml="/root/tmphtml"
 rm $tmphtml >/dev/null 2>&1
 wget -O $tmphtml 'http://releases.ubuntu.com/' >/dev/null 2>&1
 
-prec=$(fgrep Precise $tmphtml | head -1 | awk '{print $3 $1}')
-trus=$(fgrep Trusty $tmphtml | head -1 | awk '{print $3 $1}')
-xenn=$(fgrep Xenial $tmphtml | head -1 | awk '{print $3 $1}')
-zest=$(fgrep Zesty $tmphtml | head -1 | awk '{print $3 $1}')
+prec=$(fgrep Precise $tmphtml | head -1 | awk '{print $3}')
+trus=$(fgrep Trusty $tmphtml | head -1 | awk '{print $3}')
+xenn=$(fgrep Xenial $tmphtml | head -1 | awk '{print $3}')
+zest=$(fgrep Zesty $tmphtml | head -1 | awk '{print $3}')
 
 
 # ask whether to include vmware tools or not
 while true; do
     echo " which ubuntu edition would you like to remaster:"
     echo
-    echo "  [1] Ubuntu $prec LTS Server amd64 - Precise Pangolin"
-    echo "  [2] Ubuntu $trus LTS Server amd64 - Trusty Tahr"
-    echo "  [3] Ubuntu $xenn LTS Server amd64 - Xenial Xerus"
+    echo "  [1] Ubuntu $prec LTS Server amd64 - 12.04 Precise Pangolin"
+    echo "  [2] Ubuntu $trus LTS Server amd64 - 14.04 Trusty Tahr"
+    echo "  [3] Ubuntu $xenn LTS Server amd64 - 16.04 Xenial Xerus"
+    echo "  [4] Ubuntu $zest LTS Server amd64 - 17.04 Zesty Zapus"
     echo
     read -p " please enter your preference: [1|2|3]: " ubver
     case $ubver in
